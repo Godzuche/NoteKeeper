@@ -1,9 +1,16 @@
 package com.example.notekeeper
 
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 
 class DataManagerTest {
+
+    @Before
+    fun setUp() {
+        DataManager.notes.clear()
+        DataManager.initializeNotes()
+    }
 
     @Test
     fun addNote() {
