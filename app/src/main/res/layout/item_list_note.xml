@@ -36,7 +36,7 @@
                 android:layout_marginStart="8dp"
                 style="@style/courseTitle"/>
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/textTitle"
+                android:id="@+id/text_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 tools:text="TextView"

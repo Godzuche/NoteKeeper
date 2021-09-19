@@ -27,6 +27,7 @@ class NoteListActivity : AppCompatActivity() {
         }
 
         binding.contentNoteList.listItems.layoutManager = LinearLayoutManager(this)
+        binding.contentNoteList.listItems.adapter = RecyclerAdapter(this, DataManager.notes)
         Log.d(tag, "onCreate")
     }
 
@@ -44,7 +45,7 @@ class NoteListActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
+        binding.contentNoteList.listItems.adapter?.notifyDataSetChanged()
         Log.d(tag, "onResume")
     }
 }
