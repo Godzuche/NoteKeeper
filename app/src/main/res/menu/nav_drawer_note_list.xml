@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+     <group android:id="@+id/activity_group"
+         android:checkableBehavior="single">
+
+         <item
+             android:id="@+id/nav_notes"
+             android:title="Notes"
+             android:icon="@drawable/ic_assignment_black_24"/>
+         <item
+             android:id="@+id/nav_courses"
+             android:title="Courses"
+             android:icon="@drawable/ic_baseline_library_books_24"/>
+     </group>
+
+    <group android:id="@+id/group_communicate">
+        <item
+            android:id="@+id/communicate"
+            android:title="Communicate">
+            <menu>
+                <item
+                    android:id="@+id/nav_share"
+                    android:title="Share"
+                    android:icon="@drawable/ic_baseline_share_24"/>
+                <item
+                    android:id="@+id/nav_send"
+                    android:title="Send"
+                    android:icon="@drawable/ic_baseline_send_24"/>
+            </menu>
+        </item>
+    </group>
+</menu>
