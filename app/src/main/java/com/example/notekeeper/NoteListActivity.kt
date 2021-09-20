@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.notekeeper.databinding.ActivityNoteListBinding
 import com.google.android.material.navigation.NavigationView
@@ -20,6 +21,9 @@ class NoteListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     private val noteRecyclerAdapter by lazy {  RecyclerAdapter(this, DataManager.notes) }
 
     private val noteLayoutManager by lazy { LinearLayoutManager(this) }
+
+    private val courseLayoutManager by lazy { GridLayoutManager(this, 2) }
+    private val courseRecyclerAdapter by lazy { CourseRecyclerAdapter(this, DataManager.courses.values.toList()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +61,13 @@ class NoteListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         binding.navView.menu.findItem(R.id.nav_notes).isChecked = true
     }
 
+    private fun displayCourses() {
+        binding.appBarNoteList.contentNoteList.listItems.layoutManager = courseLayoutManager
+        binding.appBarNoteList.contentNoteList.listItems.adapter = courseRecyclerAdapter
+
+        binding.navView.menu.findItem(R.id.nav_courses).isChecked = true
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_note_list, menu)
         return true
@@ -89,7 +100,7 @@ class NoteListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                 displayNotes()
             }
             R.id.nav_courses -> {
-                handleSelection("Courses")
+                displayCourses()
             }
             R.id.nav_share -> {
                 handleSelection("Don't you think you've shared enough")
