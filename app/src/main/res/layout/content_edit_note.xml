@@ -24,7 +24,7 @@
         app:layout_constraintEnd_toEndOf="@id/courseSpinner"
         app:layout_constraintTop_toBottomOf="@id/courseSpinner"
         android:layout_marginTop="8dp"
-        android:hint="Title"/>
+        android:hint="Note Title"/>
 
     <EditText
         android:id="@+id/note_text"
@@ -35,6 +35,6 @@
         app:layout_constraintEnd_toEndOf="@id/note_title"
         app:layout_constraintTop_toBottomOf="@id/note_title"
         android:layout_marginTop="8dp"
-        android:hint="Text"/>
+        android:hint="Note Text"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
