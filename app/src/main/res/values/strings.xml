@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">NoteKeeper</string>
-    <string name="page_title">Edit Note</string>
-    <string name="open_drawer">Open navigation drawer</string>
-    <string name="close_drawer">Close navigation drawer</string>
+    <string name="page_title" translatable="false">Edit Note</string>
+    <string name="open_drawer" translatable="false">Open navigation drawer</string>
+    <string name="close_drawer" translatable="false">Close navigation drawer</string>
+    <string name="edit_note_activity_label">Edit Note</string>
+    <string name="note_title_hint">Note Title</string>
+    <string name="note_text_hint">Note Text</string>
+    <string name="nav_share_message" translatable="false">Don\'t you think you\'ve shared enough</string>
+    <string name="nav_send_message" translatable="false">Send</string>
+    <string name="nav_how_many_message_format">Notes: %1$d | Courses: %2$d</string>
 </resources>

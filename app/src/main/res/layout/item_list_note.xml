@@ -35,7 +35,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="8dp"
-                style="@style/courseTitle"/>
+                style="@style/courseTitle"
+                android:textSize="@dimen/course_name_size"/>
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/text_title"
                 android:layout_width="0dp"

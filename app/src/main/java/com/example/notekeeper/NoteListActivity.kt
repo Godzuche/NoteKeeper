@@ -22,7 +22,7 @@ class NoteListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
     private val noteLayoutManager by lazy { LinearLayoutManager(this) }
 
-    private val courseLayoutManager by lazy { GridLayoutManager(this, 2) }
+    private val courseLayoutManager by lazy { GridLayoutManager(this, resources.getInteger(R.integer.course_grid_span)) }
     private val courseRecyclerAdapter by lazy { CourseRecyclerAdapter(this, DataManager.courses.values.toList()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -103,18 +103,22 @@ class NoteListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                 displayCourses()
             }
             R.id.nav_share -> {
-                handleSelection("Don't you think you've shared enough")
+                handleSelection(R.string.nav_share_message)
             }
             R.id.nav_send -> {
-                handleSelection("Send")
+                handleSelection(R.string.nav_send_message)
+            }
+            R.id.nav_how_many -> {
+                val message = getString(R.string.nav_how_many_message_format, DataManager.notes.size, DataManager.courses.size)
+                Snackbar.make(binding.appBarNoteList.contentNoteList.listItems, message, Snackbar.LENGTH_LONG).show()
             }
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 
-    private fun handleSelection(message: String) {
-        Snackbar.make(binding.appBarNoteList.contentNoteList.listItems, message, Snackbar.LENGTH_LONG).show()
+    private fun handleSelection(stringId: Int) {
+        Snackbar.make(binding.appBarNoteList.contentNoteList.listItems, stringId, Snackbar.LENGTH_LONG).show()
     }
 
 }
