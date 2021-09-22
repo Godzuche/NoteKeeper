@@ -28,8 +28,8 @@ class RecyclerAdapter(private val context: Context?, private val notes: List<Not
     override fun getItemCount() = notes.size
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textCourse: MaterialTextView = itemView.findViewById(R.id.text_course)
-        val textTitle: MaterialTextView = itemView.findViewById(R.id.text_title)
+        val textCourse: MaterialTextView = itemView.findViewById(R.id.text_course_title)
+        val textTitle: MaterialTextView = itemView.findViewById(R.id.text_note_title)
 
         var notePosition = 0
 

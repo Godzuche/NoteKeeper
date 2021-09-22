@@ -6,4 +6,27 @@
         <item name="android:textColor">@color/pluralsight_orange</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="note_title" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/pluralsight_plum</item>
+    </style>
+
+    <style name="branded_text" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/pluralsight_orange</item>
+    </style>
+
+    <style name="branded_text.course_name">
+        <item name="android:textColor">@color/pluralsight_orange</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="module_name" parent="branded_text">
+        <item name="android:textColor">@color/pluralsight_orange</item>
+        <item name="textAllCaps">true</item>
+    </style>
+
+    <style name="add_fab" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="android:layout_margin">@dimen/fab_margin</item>
+        <item name="srcCompat">@drawable/fab_add</item>
+    </style>
 </resources>

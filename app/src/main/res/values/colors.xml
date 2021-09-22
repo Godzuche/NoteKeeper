@@ -10,4 +10,6 @@
 
     //
     <color name="pluralsight_orange">#FFF05A28</color>
+    <color name="pluralsight_plum">#A7305D</color>
+    <color name="fab_color">#D81b60</color>
 </resources>

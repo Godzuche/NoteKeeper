@@ -26,7 +26,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:text="TextView"
-                style="@style/courseTitle"
+                style="@style/branded_text.course_name"
                 android:textAlignment="center"
                 android:maxLines="3"
                 android:textSize="@dimen/course_name_size"/>
