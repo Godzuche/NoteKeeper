@@ -11,6 +11,8 @@ import com.google.android.material.textview.MaterialTextView
 class RecyclerAdapter(private val context: Context?, private val notes: List<NoteInfo>) :
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder>(){
 
+    var onNoteSelectedListener: OnNoteSelectedListener? = null
+
     private val layoutInflater = LayoutInflater.from(context)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = layoutInflater.inflate(R.layout.item_list_note, parent, false)
@@ -27,6 +29,10 @@ class RecyclerAdapter(private val context: Context?, private val notes: List<Not
 
     override fun getItemCount() = notes.size
 
+    fun setOnSelectedListener(listener: OnNoteSelectedListener) {
+        onNoteSelectedListener = listener
+    }
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textCourse: MaterialTextView = itemView.findViewById(R.id.text_course_title)
         val textTitle: MaterialTextView = itemView.findViewById(R.id.text_note_title)
@@ -35,6 +41,7 @@ class RecyclerAdapter(private val context: Context?, private val notes: List<Not
 
         init {
             itemView.setOnClickListener {
+                onNoteSelectedListener?.onNoteSelected(notes[notePosition])
                 val intent = Intent(context, EditNoteActivity::class.java)
                 intent.putExtra(NOTE_POSITION, notePosition)
                 context?.startActivity(intent)
@@ -42,4 +49,7 @@ class RecyclerAdapter(private val context: Context?, private val notes: List<Not
         }
     }
 
+}
+interface OnNoteSelectedListener {
+    fun onNoteSelected(note: NoteInfo)
 }

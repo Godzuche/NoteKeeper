@@ -15,15 +15,22 @@ import com.example.notekeeper.databinding.ActivityNoteListBinding
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 
-class NoteListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class NoteListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
+    OnNoteSelectedListener {
     private val tag = this::class.simpleName
     private lateinit var binding: ActivityNoteListBinding
 
-    private val noteRecyclerAdapter by lazy {  RecyclerAdapter(this, DataManager.notes) }
+    private val noteRecyclerAdapter by lazy {  val adapter = RecyclerAdapter(this, DataManager.notes)
+        adapter.setOnSelectedListener(this)
+        adapter
+    }
     private val noteLayoutManager by lazy { LinearLayoutManager(this) }
 
     private val courseLayoutManager by lazy { GridLayoutManager(this, resources.getInteger(R.integer.course_grid_span)) }
     private val courseRecyclerAdapter by lazy { CourseRecyclerAdapter(this, DataManager.courses.values.toList()) }
+
+    private val recentNotesLayoutManager by lazy { LinearLayoutManager(this) }
+    private val recentNotesRecyclerAdapter by lazy { RecyclerAdapter(this,  viewModel.recentlyViewedNotes) }
 
     private val viewModel by lazy {ViewModelProvider(this)[NoteListActivityViewModel::class.java]}
 
@@ -120,7 +127,7 @@ class NoteListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         return true
     }
 
-    fun handleDisplaySelection(itemId: Int) {
+    private fun handleDisplaySelection(itemId: Int) {
         when(itemId) {
             R.id.nav_notes -> {
                 displayNotes()
@@ -135,10 +142,19 @@ class NoteListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     }
 
     private fun displayRecentlyViewedNotes() {
+        binding.appBarNoteList.contentNoteList.listItems.adapter = recentNotesRecyclerAdapter
+        binding.appBarNoteList.contentNoteList.listItems.layoutManager = recentNotesLayoutManager
+
+        binding.navView.menu.findItem(R.id.nav_recent_notes).isChecked = true
     }
 
     private fun handleSelection(stringId: Int) {
         Snackbar.make(binding.appBarNoteList.contentNoteList.listItems, stringId, Snackbar.LENGTH_LONG).show()
     }
+
+    override fun onNoteSelected(note: NoteInfo) {
+        viewModel.addToRecentlyViewedNotes(note)
+    }
+
 
 }
