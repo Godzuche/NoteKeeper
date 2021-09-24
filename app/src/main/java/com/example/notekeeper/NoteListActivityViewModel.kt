@@ -2,7 +2,9 @@ package com.example.notekeeper
 
 import androidx.lifecycle.ViewModel
 
-class NoteListActivityViewModel: ViewModel() {
+class NoteListActivityViewModel : ViewModel() {
+    val navDrawerDisplaySelectionName =
+        "com.example.notekeeper.NoteLis tActivityViewModel.navDrawerDisplaySelection"
     var navDrawerDisplaySelection = R.id.nav_notes
 
     private val maxRecentlyViewedNotes = 5
@@ -11,11 +13,11 @@ class NoteListActivityViewModel: ViewModel() {
     fun addToRecentlyViewedNotes(note: NoteInfo) {
         //check if selection is already in the list
         val existingIndex = recentlyViewedNotes.indexOf(note)
-        if(existingIndex == -1) {
+        if (existingIndex == -1) {
             //it isn't in the list...
             //Add new one to beginning of the list and remove any beyond max we want to keep
             recentlyViewedNotes.add(0, note)
-            for(index in recentlyViewedNotes.lastIndex downTo maxRecentlyViewedNotes) {
+            for (index in recentlyViewedNotes.lastIndex downTo maxRecentlyViewedNotes) {
                 recentlyViewedNotes.removeAt(index)
             }
         } else {

@@ -42,6 +42,9 @@ class NoteListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
         setSupportActionBar(binding.appBarNoteList.noteListTopAppBar)
 
+        if (savedInstanceState != null) {
+            viewModel.navDrawerDisplaySelection = savedInstanceState.getInt(viewModel.navDrawerDisplaySelectionName)
+        }
         handleDisplaySelection(viewModel.navDrawerDisplaySelection)
 
         val toggle = ActionBarDrawerToggle(
@@ -156,5 +159,8 @@ class NoteListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         viewModel.addToRecentlyViewedNotes(note)
     }
 
-
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(viewModel.navDrawerDisplaySelectionName, viewModel.navDrawerDisplaySelection)
+    }
 }
