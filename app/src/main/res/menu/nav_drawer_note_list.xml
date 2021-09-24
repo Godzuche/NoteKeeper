@@ -14,6 +14,9 @@
              android:id="@+id/nav_courses"
              android:title="Courses"
              android:icon="@drawable/ic_baseline_library_books_24"/>
+         <item
+             android:id="@+id/nav_recent_notes"
+             android:title="Recently Viewed Notes"/>
      </group>
 
     <group android:id="@+id/group_communicate">
