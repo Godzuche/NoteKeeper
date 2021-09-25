@@ -1,10 +1,15 @@
 package com.example.notekeeper
 
+import android.os.Bundle
 import androidx.lifecycle.ViewModel
 
 class NoteListActivityViewModel : ViewModel() {
+    var isNewlyCreated = true
     val navDrawerDisplaySelectionName =
         "com.example.notekeeper.NoteLis tActivityViewModel.navDrawerDisplaySelection"
+    val recentlyViewedNoteIdsName =
+        "com.example.notekeeper.NoteLis tActivityViewModel.recentlyViewedNoteIds"
+
     var navDrawerDisplaySelection = R.id.nav_notes
 
     private val maxRecentlyViewedNotes = 5
@@ -27,6 +32,21 @@ class NoteListActivityViewModel : ViewModel() {
                 recentlyViewedNotes[index + 1] = recentlyViewedNotes[index]
             }
             recentlyViewedNotes[0] = note
+        }
+    }
+
+    fun saveState(outState: Bundle) {
+        outState.putInt(navDrawerDisplaySelectionName, navDrawerDisplaySelection)
+        val noteIds = DataManager.noteIdsAsIntArray(recentlyViewedNotes)
+        outState.putIntArray(recentlyViewedNoteIdsName, noteIds)
+    }
+
+    fun restoreState(savedInstanceState: Bundle) {
+        navDrawerDisplaySelection = savedInstanceState.getInt(navDrawerDisplaySelectionName)
+        val noteIds = savedInstanceState.getIntArray(recentlyViewedNoteIdsName)
+        val noteList = noteIds?.let { DataManager.loadNotes(*noteIds) }
+        if (noteList != null) {
+            recentlyViewedNotes.addAll(noteList)
         }
     }
 }
