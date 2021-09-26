@@ -97,6 +97,7 @@ class NoteListActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
     override fun onResume() {
         super.onResume()
         binding.appBarNoteList.contentNoteList.listItems.adapter?.notifyDataSetChanged()
+        saveable = true
         Log.d(tag, "onResume")
     }
 

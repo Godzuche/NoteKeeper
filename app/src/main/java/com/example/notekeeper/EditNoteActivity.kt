@@ -1,5 +1,6 @@
 package com.example.notekeeper
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -8,9 +9,15 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.example.notekeeper.databinding.ActivityEditNoteBinding
 
+
+var saveable = true
+
 class EditNoteActivity : AppCompatActivity() {
     private val tag = this::class.simpleName
     private var notePosition = POSITION_NOT_SET
+
+
+    val noteGetTogetherHelper = NoteGetTogetherHelper(this, lifecycle)
 
     private lateinit var binding: ActivityEditNoteBinding
 
@@ -71,8 +78,22 @@ class EditNoteActivity : AppCompatActivity() {
                 moveNext()
                 true
             }
+            R.id.action_getTogether -> {
+                noteGetTogetherHelper.sendMessage(DataManager.loadNote(notePosition))
+                true
+            }
+            R.id.action_discard -> {
+                discard()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun discard() {
+        saveable = false
+        val intent = Intent(this, NoteListActivity::class.java)
+        startActivity(intent)
     }
 
     private fun moveNext() {
@@ -94,7 +115,8 @@ class EditNoteActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        saveNote()
+        if (saveable)
+            saveNote()
         Log.d(tag, "onPause")
     }
 
