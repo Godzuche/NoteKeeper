@@ -2,11 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item android:id="@+id/action_discard"
+        android:title="Discard"
+        android:icon="@drawable/ic_baseline_replay_24"
+        app:showAsAction="ifRoom|withText"/>
     <item
         android:title="Next"
         android:id="@+id/action_next"
         app:showAsAction="ifRoom|withText"
-        android:icon="@drawable/ic_baseline_forward_white_24"/>
+        android:icon="@drawable/ic_baseline_forward_black_24"
+        android:iconTint="@color/black"/>
+    <item android:id="@+id/action_getTogether"
+        app:showAsAction="ifRoom|withText"
+        android:icon="@drawable/ic_baseline_group_24"
+        android:title="Get Together" />
+
     <item
         android:id="@+id/action_settings"
         android:title="Settings"
