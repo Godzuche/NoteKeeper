@@ -54,7 +54,7 @@ class EditNoteActivity : AppCompatActivity(){
                 .show()
         }*/
 
-        colorSelector.setListener { color ->
+        colorSelector.addListener { color ->
             this.noteColor = color
         }
         Log.d(tag, "onCreate")

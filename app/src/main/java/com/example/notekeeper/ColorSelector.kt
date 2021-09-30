@@ -66,10 +66,10 @@ class ColorSelector : LinearLayout {
         selectedColorIndex = index
         selectedColor.setBackgroundColor(listOfColors[selectedColorIndex])
     }
-    private var colorSelectedListener: ((Int) -> Unit)? =null
+    private var colorSelectedListeners: ArrayList<(Int) -> Unit> = arrayListOf()
 
-    fun setListener(color: (Int) -> Unit) {
-        colorSelectedListener = color
+    fun addListener(color: (Int) -> Unit) {
+        colorSelectedListeners.add(color)
     }
 
     private fun selectNextColor() {
@@ -93,11 +93,11 @@ class ColorSelector : LinearLayout {
     }
 
     private fun broadcastColor() {
-        var color = if (colorEnabled.isChecked)
+        val color = if (colorEnabled.isChecked)
             listOfColors[selectedColorIndex]
         else
             Color.TRANSPARENT
-        colorSelectedListener?.let { function ->
+        colorSelectedListeners.forEach{ function ->
             function(color)
         }
     }
