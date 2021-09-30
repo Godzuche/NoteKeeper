@@ -54,9 +54,9 @@ class EditNoteActivity : AppCompatActivity(){
                 .show()
         }*/
 
-        colorSelector.addListener { color ->
-            this.noteColor = color
-        }
+//        colorSelector.addListener { color ->
+//            this.noteColor = color
+//        }
         Log.d(tag, "onCreate")
     }
 
@@ -66,7 +66,7 @@ class EditNoteActivity : AppCompatActivity(){
         val note = DataManager.notes[notePosition]
         binding.contentEditNote.noteTitle.setText(note.title)
         binding.contentEditNote.noteText.setText(note.text)
-        colorSelector.selectedColorValue = (note.color)
+//        colorSelector.selectedColorValue = (note.color)
         this.noteColor = note.color
 
         val coursePosition = DataManager.courses.values.indexOf(note.course)

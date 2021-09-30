@@ -9,32 +9,30 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.LinearLayout
 
-class ColorSelector : LinearLayout {
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attributeSet: AttributeSet?) : super(context, attributeSet)
-    constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) : super(
-        context,
-        attributeSet,
-        defStyleAttr
-    )
+class ColorSelector @JvmOverloads
+constructor(
+    context: Context,
+    attributeSet: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+    defStyleRes: Int = 0)
+: LinearLayout(context, attributeSet, defStyleAttr, defStyleRes) {
 
-    constructor(
-        context: Context,
-        attributeSet: AttributeSet,
-        defStyleAttr: Int,
-        defStyleRes: Int
-    ) : super(context, attributeSet, defStyleAttr, defStyleRes) {
-
-    }
 
     private val colorSelectorArrowLeft: ImageView by lazy {findViewById(R.id.colorSelectorArrowLeft)}
     private val colorSelectorArrowRight: ImageView by lazy { findViewById(R.id.colorSelectorArrowRight)}
     private val colorEnabled: CheckBox by lazy { findViewById(R.id.colorEnabled)}
     private val selectedColor: View by lazy { findViewById(R.id.selectedColor)}
 
-    private var listOfColors = listOf(Color.BLUE, Color.RED, Color.GREEN, Color.CYAN, Color.DKGRAY, Color.BLACK, Color.GRAY, Color.LTGRAY, Color.MAGENTA, Color.YELLOW)
+    private var listOfColors = listOf(Color.BLUE, Color.RED, Color.GREEN)
     private var selectedColorIndex = 0
     init {
+        val typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.ColorSelector)
+        listOfColors = typedArray.getTextArray(R.styleable.ColorSelector_colors)
+            .map {
+                Color.parseColor(it.toString())
+            }
+        typedArray.recycle()
+
         orientation = HORIZONTAL
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         inflater.inflate(R.layout.color_selector, this)
