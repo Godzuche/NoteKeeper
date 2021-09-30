@@ -9,4 +9,14 @@
     <string name="nav_share_message" translatable="false">Don\'t you think you\'ve shared enough</string>
     <string name="nav_send_message" translatable="false">Send</string>
     <string name="nav_how_many_message_format">Notes: %1$d | Courses: %2$d</string>
+
+    <string-array name="note_color_array">
+        <item>#E57373</item>
+        <item>#BA68C8</item>
+        <item>#64B5F6</item>
+        <item>#81C784</item>
+        <item>#FFF176</item>
+        <item>#FFB74D</item>
+        <item>#90A4AE</item>
+    </string-array>
 </resources>
