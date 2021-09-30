@@ -1,6 +1,7 @@
 package com.example.notekeeper
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -9,13 +10,13 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.example.notekeeper.databinding.ActivityEditNoteBinding
 
-
 var saveable = true
 
-class EditNoteActivity : AppCompatActivity() {
+class EditNoteActivity : AppCompatActivity(){
     private val tag = this::class.simpleName
     private var notePosition = POSITION_NOT_SET
-
+    private var noteColor: Int = Color.TRANSPARENT
+    private val colorSelector by lazy { findViewById<ColorSelector>(R.id.colorSelector) }
 
     val noteGetTogetherHelper = NoteGetTogetherHelper(this, lifecycle)
 
@@ -29,7 +30,7 @@ class EditNoteActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.editNoteTopAppBar)
 
-        val adapterCourses = ArrayAdapter<CourseInfo>(
+        val adapterCourses = ArrayAdapter(
             this,
             android.R.layout.simple_spinner_item,
             DataManager.courses.values.toList()
@@ -52,6 +53,10 @@ class EditNoteActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .show()
         }*/
+
+        colorSelector.setListener { color ->
+            this.noteColor = color
+        }
         Log.d(tag, "onCreate")
     }
 
@@ -61,6 +66,8 @@ class EditNoteActivity : AppCompatActivity() {
         val note = DataManager.notes[notePosition]
         binding.contentEditNote.noteTitle.setText(note.title)
         binding.contentEditNote.noteText.setText(note.text)
+        colorSelector.selectedColorValue = (note.color)
+        this.noteColor = note.color
 
         val coursePosition = DataManager.courses.values.indexOf(note.course)
         binding.contentEditNote.courseSpinner.setSelection(coursePosition)
@@ -125,10 +132,12 @@ class EditNoteActivity : AppCompatActivity() {
         note.title = binding.contentEditNote.noteTitle.text.toString()
         note.text = binding.contentEditNote.noteText.text.toString()
         note.course = binding.contentEditNote.courseSpinner.selectedItem as CourseInfo
+        note.color = this.noteColor
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(NOTE_POSITION, notePosition)
     }
+
 }

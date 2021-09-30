@@ -23,8 +23,8 @@ class RecyclerAdapter(private val context: Context?, private val notes: List<Not
         val note = notes[position]
         holder.textCourse.text = note.course?.title
         holder.textTitle.text = note.title
-
         holder.notePosition = position
+        holder.color.setBackgroundColor(note.color)
     }
 
     override fun getItemCount() = notes.size
@@ -36,7 +36,7 @@ class RecyclerAdapter(private val context: Context?, private val notes: List<Not
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textCourse: MaterialTextView = itemView.findViewById(R.id.text_course_title)
         val textTitle: MaterialTextView = itemView.findViewById(R.id.text_note_title)
-
+        var color: View = itemView.findViewById(R.id.noteColor)
         var notePosition = 0
 
         init {
