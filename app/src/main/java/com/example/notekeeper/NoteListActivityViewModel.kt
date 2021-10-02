@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 class NoteListActivityViewModel : ViewModel() {
     var isNewlyCreated = true
     val navDrawerDisplaySelectionName =
-        "com.example.notekeeper.NoteLis tActivityViewModel.navDrawerDisplaySelection"
+        "com.example.notekeeper.NoteListActivityViewModel.navDrawerDisplaySelection"
     val recentlyViewedNoteIdsName =
-        "com.example.notekeeper.NoteLis tActivityViewModel.recentlyViewedNoteIds"
+        "com.example.notekeeper.NoteListActivityViewModel.recentlyViewedNoteIds"
 
     var navDrawerDisplaySelection = R.id.nav_notes
 
