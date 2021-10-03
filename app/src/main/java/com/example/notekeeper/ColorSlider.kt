@@ -24,14 +24,14 @@ class ColorSlider @JvmOverloads constructor(
     private val halfH = if (h >= 0) h / 2f else 1f
     private val paint = Paint()
     private var noColorDrawable: Drawable? = null
-    set(value) {
-        w2 = noColorDrawable?.intrinsicWidth ?: 0
-        h2 = noColorDrawable?.intrinsicHeight ?: 0
-        halfW2 = if (w2 >= 0) w2/2 else 1
-        halfH2 = if (h2 >= 0) h2/2 else 1
-        noColorDrawable?.setBounds(-halfW2, -halfH2, halfW2, halfH2)
-        field = value
-    }
+        set(value) {
+            w2 = value?.intrinsicWidth ?: 0
+            h2 = value?.intrinsicHeight ?: 0
+            halfW2 = if (w2 >= 0) w2 / 2 else 1
+            halfH2 = if (h2 >= 0) h2 / 2 else 1
+            value?.setBounds(-halfW2, -halfH2, halfW2, halfH2)
+            field = value
+        }
     var w2 = 0
     private var h2 = 0
     private var halfW2 = 1
@@ -53,9 +53,9 @@ class ColorSlider @JvmOverloads constructor(
         splitTrack = false
         setPadding(paddingStart, paddingTop, paddingEnd, paddingBottom + getPixelValueFromDP(16f).toInt())
         thumb = context.getDrawable(R.drawable.ic_color_slider_thumb)
-        val noColorDrawable: Drawable? = context.getDrawable(R.drawable.ic_baseline_clear_24)
+        noColorDrawable = context.getDrawable(R.drawable.ic_baseline_clear_24)
 
-        setOnSeekBarChangeListener( object : OnSeekBarChangeListener {
+        setOnSeekBarChangeListener( object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 listeners.forEach {
                     it(colors[progress])
@@ -95,13 +95,11 @@ class ColorSlider @JvmOverloads constructor(
             val count = colors.size
             val saveCount = canvas.save()
             canvas.translate(paddingStart.toFloat(), (height / 2).toFloat() + getPixelValueFromDP(16f))
+            val spacing: Float = (width - paddingStart - paddingEnd) / (count - 1).toFloat()
+
             if (count > 1) {
                 for (i in 0 until count) {
-
-                    val spacing: Float = (width - paddingStart - paddingEnd) / (count - 1).toFloat()
-
                     if (i == 0) {
-
                         noColorDrawable?.draw(canvas)
                     } else {
                         paint.color = colors[i]
