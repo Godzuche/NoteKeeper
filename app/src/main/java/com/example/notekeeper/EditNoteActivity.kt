@@ -16,7 +16,7 @@ class EditNoteActivity : AppCompatActivity(){
     private val tag = this::class.simpleName
     private var notePosition = POSITION_NOT_SET
     private var noteColor: Int = Color.TRANSPARENT
-    private val colorSelector by lazy { findViewById<ColorSlider>(R.id.colorSelector) }
+    private val colorSelector by lazy { findViewById<ColorDialView>(R.id.colorSelector) }
 
     val noteGetTogetherHelper = NoteGetTogetherHelper(this, lifecycle)
 
@@ -57,9 +57,9 @@ class EditNoteActivity : AppCompatActivity(){
 //        colorSelector.addListener { color ->
 //            this.noteColor = color
 //        }
-        colorSelector.addListener {
-            noteColor = it
-        }
+//        colorSelector.addListener {
+//            noteColor = it
+//        }
         Log.d(tag, "onCreate")
     }
 
@@ -69,7 +69,7 @@ class EditNoteActivity : AppCompatActivity(){
         val note = DataManager.notes[notePosition]
         binding.contentEditNote.noteTitle.setText(note.title)
         binding.contentEditNote.noteText.setText(note.text)
-        colorSelector.selectedColorValue = (note.color)
+//        colorSelector.selectedColorValue = (note.color)
         this.noteColor = note.color
 
         val coursePosition = DataManager.courses.values.indexOf(note.course)

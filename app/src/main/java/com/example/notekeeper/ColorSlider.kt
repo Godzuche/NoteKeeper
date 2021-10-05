@@ -32,7 +32,7 @@ class ColorSlider @JvmOverloads constructor(
             value?.setBounds(-halfW2, -halfH2, halfW2, halfH2)
             field = value
         }
-    var w2 = 0
+    private var w2 = 0
     private var h2 = 0
     private var halfW2 = 1
     private var halfH2 = 1

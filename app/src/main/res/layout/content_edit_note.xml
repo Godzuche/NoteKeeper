@@ -45,11 +45,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Note Color"
-        android:layout_margin="16dp"
+        style="?textAppearanceBody2"
+        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/note_text"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="@id/note_text"/>
 
-    <com.example.notekeeper.ColorSlider
+    <com.example.notekeeper.ColorDialView
+        android:id="@+id/colorSelector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/colorSelectorLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="16dp"
+        app:dialDiameter="200dp"
+        app:colors="@array/note_color_array_many"/>
+
+<!--    <com.example.notekeeper.ColorSlider
         android:id="@+id/colorSelector"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -58,5 +71,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="16dp"
-        app:colors="@array/note_color_array"/>
+        app:colors="@array/note_color_array"/>-->
 </androidx.constraintlayout.widget.ConstraintLayout>
