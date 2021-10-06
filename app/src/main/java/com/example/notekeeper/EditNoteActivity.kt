@@ -18,7 +18,7 @@ class EditNoteActivity : AppCompatActivity(){
     private var noteColor: Int = Color.TRANSPARENT
     private val colorSelector by lazy { findViewById<ColorDialView>(R.id.colorSelector) }
 
-    val noteGetTogetherHelper = NoteGetTogetherHelper(this, lifecycle)
+    private val noteGetTogetherHelper = NoteGetTogetherHelper(this, lifecycle)
 
     private lateinit var binding: ActivityEditNoteBinding
 

@@ -9,21 +9,21 @@ import com.jwhh.notekeeper.PseudoLocationManager
 import com.jwhh.notekeeper.PseudoMessagingConnection
 import com.jwhh.notekeeper.PseudoMessagingManager
 
-class NoteGetTogetherHelper(val context: Context, val lifecycle: Lifecycle): LifecycleObserver {
+class NoteGetTogetherHelper(val context: Context, private val lifecycle: Lifecycle): LifecycleObserver {
 
     init {
         lifecycle.addObserver(this)
     }
-    val tag = this::class.simpleName
+    private val tag = this::class.simpleName
     var currentLat = 0.0
     var currentLon = 0.0
 
-    val locManager = PseudoLocationManager(context) {lat, lon ->
+    private val locManager = PseudoLocationManager(context) { lat, lon ->
         currentLat = lat
         currentLon = lon
         Log.d(tag, "Location Callback Lat:$currentLat Lon:$currentLon")
     }
-    val msgManager = PseudoMessagingManager(context)
+    private val msgManager = PseudoMessagingManager(context)
     var msgConnection : PseudoMessagingConnection? = null
 
     fun sendMessage(note: NoteInfo) {

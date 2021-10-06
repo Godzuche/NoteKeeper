@@ -214,7 +214,6 @@ class ColorDialView @JvmOverloads constructor(
         totalTopPadding = paddingTop + extraPadding * localScale
         totalEndPadding = paddingEnd + extraPadding * localScale
         totalBottomPadding = paddingBottom + extraPadding * localScale
-
         //compute helper values
         horizontalSize = paddingStart + paddingEnd + (extraPadding * localScale * 2) + (dialDiameter * localScale)
         verticalSize = paddingTop + paddingBottom + (extraPadding * localScale * 2) + (dialDiameter * localScale)
