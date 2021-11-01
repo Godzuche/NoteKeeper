@@ -1,13 +1,20 @@
 package com.example.notekeeper
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.example.notekeeper.databinding.ActivityEditNoteBinding
 
 var saveable = true
@@ -57,9 +64,9 @@ class EditNoteActivity : AppCompatActivity(){
 //        colorSelector.addListener { color ->
 //            this.noteColor = color
 //        }
-//        colorSelector.addListener {
-//            noteColor = it
-//        }
+        colorSelector.addListener {
+            noteColor = it
+        }
         Log.d(tag, "onCreate")
     }
 
@@ -69,7 +76,7 @@ class EditNoteActivity : AppCompatActivity(){
         val note = DataManager.notes[notePosition]
         binding.contentEditNote.noteTitle.setText(note.title)
         binding.contentEditNote.noteText.setText(note.text)
-//        colorSelector.selectedColorValue = (note.color)
+        colorSelector.selectedColorValue = note.color
         this.noteColor = note.color
 
         val coursePosition = DataManager.courses.values.indexOf(note.course)
@@ -81,8 +88,68 @@ class EditNoteActivity : AppCompatActivity(){
         return true
     }
 
+
+    val CHANNEL_ID = "Reminder"
+    val notificationId: Int = 0
+
+    // You must register a notification channel with the system by using the following code in order to deliver the notification on Android 8.0 and higher
+    private fun createNotificationChannel() {
+        //Create the NotificationChannel, but only on API 26+ because
+        //the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString(R.string.channel_name)
+            val descriptionText = getString(R.string.channel_description)
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+                enableLights(true)
+                shouldVibrate()
+
+            }
+            // Register the channel with the system
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.action_reminder -> {
+
+                val shareIntent = PendingIntent.getActivity(this, 0, Intent.createChooser(Intent(Intent.ACTION_SEND)
+                    .setType("text/plain")
+                    .putExtra(Intent.EXTRA_TEXT, DataManager.notes[notePosition].text),
+                    "Share Note Reminder"),
+                    PendingIntent.FLAG_UPDATE_CURRENT)
+
+                // The channel id is required for compatibility with Android 8.0 (API level 26)
+                var builder = NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setSmallIcon(R.drawable.ic_baseline_library_books_24)
+                    .setContentTitle(DataManager.notes[notePosition].title)
+                    .setContentText(DataManager.notes[notePosition].text)
+                    //use this line instead for expanded text...
+                    .setStyle(NotificationCompat.BigTextStyle()
+                        .bigText(DataManager.notes[notePosition].text))
+                    .setCategory(NotificationCompat.CATEGORY_REMINDER)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        // what happens when the notification is tapped
+                    .setContentIntent(PendingIntent.getActivity(this, 0,
+                    Intent(this, EditNoteActivity::class.java).
+                        putExtra(NOTE_POSITION, notePosition),
+                    PendingIntent.FLAG_UPDATE_CURRENT))
+//                    .setContentIntent(PendingIntent.getActivity(this, 0, Intent(Intent.ACTION_VIEW, Uri.parse("https://www.rsu.edu.ng")),
+//                        PendingIntent.FLAG_UPDATE_CURRENT))
+                    .setAutoCancel(true)
+                    // Adding a send action to the notification
+                    .addAction(R.drawable.ic_baseline_share_24, "Share", shareIntent)
+
+                createNotificationChannel()
+                with(NotificationManagerCompat.from(this)) {
+                    notify(notificationId, builder.build())
+                }
+                true
+            }
             R.id.action_settings -> true
             R.id.action_next -> {
                 moveNext()
@@ -141,6 +208,10 @@ class EditNoteActivity : AppCompatActivity(){
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(NOTE_POSITION, notePosition)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 
 }
