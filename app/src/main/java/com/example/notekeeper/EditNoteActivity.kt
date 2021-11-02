@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.TaskStackBuilder
 import com.example.notekeeper.databinding.ActivityEditNoteBinding
 
 var saveable = true
@@ -123,6 +124,13 @@ class EditNoteActivity : AppCompatActivity(){
                     "Share Note Reminder"),
                     PendingIntent.FLAG_UPDATE_CURRENT)
 
+                //create a pendingIntent using TaskStackBuilder to handle the backStack properly
+                val intent = Intent(this, EditNoteActivity::class.java)
+                    .putExtra(NOTE_POSITION, notePosition)
+
+                val pendingIntent = TaskStackBuilder.create(this).addNextIntentWithParentStack(intent)
+                    .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+
                 // The channel id is required for compatibility with Android 8.0 (API level 26)
                 var builder = NotificationCompat.Builder(this, CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_baseline_library_books_24)
@@ -134,10 +142,7 @@ class EditNoteActivity : AppCompatActivity(){
                     .setCategory(NotificationCompat.CATEGORY_REMINDER)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                         // what happens when the notification is tapped
-                    .setContentIntent(PendingIntent.getActivity(this, 0,
-                    Intent(this, EditNoteActivity::class.java).
-                        putExtra(NOTE_POSITION, notePosition),
-                    PendingIntent.FLAG_UPDATE_CURRENT))
+                    .setContentIntent(pendingIntent)
 //                    .setContentIntent(PendingIntent.getActivity(this, 0, Intent(Intent.ACTION_VIEW, Uri.parse("https://www.rsu.edu.ng")),
 //                        PendingIntent.FLAG_UPDATE_CURRENT))
                     .setAutoCancel(true)
@@ -208,10 +213,6 @@ class EditNoteActivity : AppCompatActivity(){
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(NOTE_POSITION, notePosition)
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
     }
 
 }
