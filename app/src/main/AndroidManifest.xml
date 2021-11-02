@@ -10,7 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NoteKeeper">
         <activity
-            android:name=".NoteListActivity">
+            android:name=".NoteQuickViewActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""/>
+        <activity android:name=".NoteListActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,8 +26,7 @@
         <activity
             android:name=".EditNoteActivity"
             android:label="@string/edit_note_activity_label"
-            android:parentActivityName=".NoteListActivity">
-        </activity>
+            android:parentActivityName=".NoteListActivity" />
     </application>
 
 </manifest>

@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -20,7 +21,7 @@ import com.example.notekeeper.databinding.ActivityEditNoteBinding
 
 var saveable = true
 
-class EditNoteActivity : AppCompatActivity(){
+class EditNoteActivity : AppCompatActivity() {
     private val tag = this::class.simpleName
     private var notePosition = POSITION_NOT_SET
     private var noteColor: Int = Color.TRANSPARENT
@@ -105,7 +106,6 @@ class EditNoteActivity : AppCompatActivity(){
                 description = descriptionText
                 enableLights(true)
                 shouldVibrate()
-
             }
             // Register the channel with the system
             val notificationManager: NotificationManager =
@@ -118,38 +118,71 @@ class EditNoteActivity : AppCompatActivity(){
         return when (item.itemId) {
             R.id.action_reminder -> {
 
-                val shareIntent = PendingIntent.getActivity(this, 0, Intent.createChooser(Intent(Intent.ACTION_SEND)
-                    .setType("text/plain")
-                    .putExtra(Intent.EXTRA_TEXT, DataManager.notes[notePosition].text),
-                    "Share Note Reminder"),
+                val shareIntent = PendingIntent.getActivity(this,
+                    0,
+                    Intent.createChooser(Intent(Intent.ACTION_SEND)
+                        .setType("text/plain")
+                        .putExtra(Intent.EXTRA_TEXT, DataManager.notes[notePosition].text),
+                        "Share Note"),
                     PendingIntent.FLAG_UPDATE_CURRENT)
 
                 //create a pendingIntent using TaskStackBuilder to handle the backStack properly
-                val intent = Intent(this, EditNoteActivity::class.java)
+                val previewIntent = Intent(this, EditNoteActivity::class.java)
                     .putExtra(NOTE_POSITION, notePosition)
 
-                val pendingIntent = TaskStackBuilder.create(this).addNextIntentWithParentStack(intent)
-                    .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+                val previewPendingIntent =
+                    TaskStackBuilder.create(this).addNextIntentWithParentStack(previewIntent)
+                        .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+
+                val quickViewIntent = Intent(this, NoteQuickViewActivity::class.java).apply {
+                    putExtra(NOTE_POSITION, notePosition)
+                    //this flags makes the activity to be a separate task on it's own without any backstack
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+
+                val quickViewPendingIntent = PendingIntent.getActivity(this, 0,
+                    quickViewIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
                 // The channel id is required for compatibility with Android 8.0 (API level 26)
-                var builder = NotificationCompat.Builder(this, CHANNEL_ID)
+                val builder = NotificationCompat.Builder(this, CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_baseline_library_books_24)
-                    .setContentTitle(DataManager.notes[notePosition].title)
-                    .setContentText(DataManager.notes[notePosition].text)
-                    //use this line instead for expanded text...
-                    .setStyle(NotificationCompat.BigTextStyle()
-                        .bigText(DataManager.notes[notePosition].text))
+                    .setContentTitle("Collapsed Title")
+                    .setContentText("Collapsed Body Text")
+                    .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.logo))
+                    //use this line instead for expandable big text...
+                    /*.setStyle(NotificationCompat.BigTextStyle()
+                        .bigText(DataManager.notes[notePosition].text)
+                        .setBigContentTitle("Big Content Title")
+                        .setSummaryText("Summary Text"))*/
+
+                        // Big picture notification style
+                    /*.setStyle(NotificationCompat.BigPictureStyle()
+                        .bigPicture(BitmapFactory.decodeResource(resources, R.drawable.logo))
+                        .bigLargeIcon(null))*/
+
+                        // Inbox Style for list of messages in notification
+                    /*.setStyle(NotificationCompat.InboxStyle()
+                        .addLine("Your taxes are due")
+                        .addLine("Free Cake This Tuesday")
+                        .addLine("Your Order Has Shipped")
+                        .addLine("Your Pluralsight Subscription")
+                        .addLine("Hey! How are you?")
+                    )*/
+
+                        // Messaging Style
+
                     .setCategory(NotificationCompat.CATEGORY_REMINDER)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
-                        // what happens when the notification is tapped
-                    .setContentIntent(pendingIntent)
 //                    .setContentIntent(PendingIntent.getActivity(this, 0, Intent(Intent.ACTION_VIEW, Uri.parse("https://www.rsu.edu.ng")),
 //                        PendingIntent.FLAG_UPDATE_CURRENT))
+                    .setContentIntent(quickViewPendingIntent)
                     .setAutoCancel(true)
                     // Adding a send action to the notification
+                    .addAction(R.drawable.ic_baseline_preview_24, "View Note", previewPendingIntent)
                     .addAction(R.drawable.ic_baseline_share_24, "Share", shareIntent)
 
                 createNotificationChannel()
+
                 with(NotificationManagerCompat.from(this)) {
                     notify(notificationId, builder.build())
                 }
