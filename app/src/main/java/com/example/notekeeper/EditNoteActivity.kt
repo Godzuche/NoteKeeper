@@ -14,14 +14,25 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.app.TaskStackBuilder
+import androidx.core.app.*
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.IconCompat
+import com.example.notekeeper.DataManager.messages
 import com.example.notekeeper.databinding.ActivityEditNoteBinding
+import java.util.*
 
 var saveable = true
 
+const val CHANNEL_ID = "Reminder"
+const val notificationId: Int = 1
+const val KEY_NOTIFICATION_ID: String = "key_notification_id"
+const val KEY_TEXT_REPLY = "key_text_reply"
+
+lateinit var builder: NotificationCompat.Builder
+lateinit var style: NotificationCompat.MessagingStyle
+
 class EditNoteActivity : AppCompatActivity() {
+
     private val tag = this::class.simpleName
     private var notePosition = POSITION_NOT_SET
     private var noteColor: Int = Color.TRANSPARENT
@@ -91,9 +102,6 @@ class EditNoteActivity : AppCompatActivity() {
     }
 
 
-    val CHANNEL_ID = "Reminder"
-    val notificationId: Int = 0
-
     // You must register a notification channel with the system by using the following code in order to deliver the notification on Android 8.0 and higher
     private fun createNotificationChannel() {
         //Create the NotificationChannel, but only on API 26+ because
@@ -143,10 +151,66 @@ class EditNoteActivity : AppCompatActivity() {
                 val quickViewPendingIntent = PendingIntent.getActivity(this, 0,
                     quickViewIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
+
+                val user: Person = Person.Builder()
+                    .setKey("${Math.random()}")
+                    .setIcon(IconCompat.createWithResource(this, R.drawable.ic_baseline_person_24))
+                    .setName("Jonathan").build()
+
+
+                var sender = Person.Builder()
+                    .setIcon(IconCompat.createWithResource(this, R.drawable.ic_baseline_person_24))
+                    .setName("Godwin").build()
+                var message = Message(sender,43000, "Hi")
+                messages.add(message)
+
+                sender = Person.Builder()
+                    .setIcon(IconCompat.createWithResource(this, R.drawable.ic_baseline_person_24))
+                    .setName("Isaac").build()
+                message = Message(sender,43000, "Happy Weekend!")
+                messages.add(message)
+
+                sender = Person.Builder()
+                    .setIcon(IconCompat.createWithResource(this, R.drawable.ic_baseline_person_24))
+                    .setName("Rebecca").build()
+                message = Message(sender,43000, "The GADS program is more interesting daily.")
+                messages.add(message)
+                val m1 = NotificationCompat.MessagingStyle.Message(messages[0].text, Date().time, messages[0].person)
+                val m2 = NotificationCompat.MessagingStyle.Message(messages[1].text, Date().time, messages[1].person)
+                val m3 = NotificationCompat.MessagingStyle.Message(messages[2].text, Date().time, messages[2].person)
+                style = NotificationCompat.MessagingStyle(user)
+                    .addMessage(m1)
+                    .addMessage(m2)
+                    .addMessage(m3)
+                    .setGroupConversation(true)
+                    .setConversationTitle("GADS 2021")
+
+                val remoteInput: RemoteInput = RemoteInput.Builder(KEY_TEXT_REPLY).run{
+                    setLabel("Enter your note here")
+                    build()
+                }
+
+                val randomRequestCode = Random().nextInt(54325)
+
+                // Intent broadcast
+                val replyIntent = Intent(this, NotificationBroadcastReceiver::class.java)
+                    .putExtra(NOTE_POSITION, notePosition)
+                    .putExtra(KEY_NOTIFICATION_ID, notificationId)
+                // Pending Intent that will contain the Broadcast Receiver
+                val replyPendingIntent = PendingIntent.getBroadcast(this, randomRequestCode, replyIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT)
+
+                // Reply Action
+                val replyAction = NotificationCompat.Action.Builder(R.drawable.ic_baseline_reply_24,
+                "ADD NOTE", replyPendingIntent)
+                    .addRemoteInput(remoteInput)
+                    .build()
+
+
                 // The channel id is required for compatibility with Android 8.0 (API level 26)
-                val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+                builder = NotificationCompat.Builder(this, CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_baseline_library_books_24)
-                    .setContentTitle("Collapsed Title")
+                    .setContentTitle("2 messages with $sender")
                     .setContentText("Collapsed Body Text")
                     .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.logo))
                     //use this line instead for expandable big text...
@@ -155,12 +219,12 @@ class EditNoteActivity : AppCompatActivity() {
                         .setBigContentTitle("Big Content Title")
                         .setSummaryText("Summary Text"))*/
 
-                        // Big picture notification style
+                    // Big picture notification style
                     /*.setStyle(NotificationCompat.BigPictureStyle()
                         .bigPicture(BitmapFactory.decodeResource(resources, R.drawable.logo))
                         .bigLargeIcon(null))*/
 
-                        // Inbox Style for list of messages in notification
+                    // Inbox Style for list of messages in notification
                     /*.setStyle(NotificationCompat.InboxStyle()
                         .addLine("Your taxes are due")
                         .addLine("Free Cake This Tuesday")
@@ -169,7 +233,12 @@ class EditNoteActivity : AppCompatActivity() {
                         .addLine("Hey! How are you?")
                     )*/
 
-                        // Messaging Style
+                    // Messaging Style
+                    .setStyle(style)
+                    .addAction(replyAction)
+                    .setColor(ContextCompat.getColor(this, R.color.pluralsight_orange))
+                    .setColorized(true)
+                    .setOnlyAlertOnce(true)
 
                     .setCategory(NotificationCompat.CATEGORY_REMINDER)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -178,8 +247,8 @@ class EditNoteActivity : AppCompatActivity() {
                     .setContentIntent(quickViewPendingIntent)
                     .setAutoCancel(true)
                     // Adding a send action to the notification
-                    .addAction(R.drawable.ic_baseline_preview_24, "View Note", previewPendingIntent)
-                    .addAction(R.drawable.ic_baseline_share_24, "Share", shareIntent)
+                    /*.addAction(R.drawable.ic_baseline_preview_24, "View Note", previewPendingIntent)
+                    .addAction(R.drawable.ic_baseline_share_24, "Share", shareIntent)*/
 
                 createNotificationChannel()
 

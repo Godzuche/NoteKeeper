@@ -3,6 +3,7 @@ package com.example.notekeeper
 object DataManager {
     val courses = HashMap<String, CourseInfo>()
     val notes = ArrayList<NoteInfo>()
+    val messages = mutableListOf<Message>()
 
     init {
         initializeCourses()
@@ -15,14 +16,16 @@ object DataManager {
         return notes.lastIndex
     }
 
-    fun findNote(course: CourseInfo, noteTitle: String,noteText: String): NoteInfo? {
+    fun findNote(course: CourseInfo, noteTitle: String, noteText: String): NoteInfo? {
         for (note in notes)
             if (course == note.course && noteTitle == note.title && noteText == note.text)
                 return note
         return null
     }
+
     fun initializeCourses() {
-        var course = CourseInfo(title = "Java Fundamentals: The Java Language", courseId = "java_lang")
+        var course =
+            CourseInfo(title = "Java Fundamentals: The Java Language", courseId = "java_lang")
         courses[course.courseId] = course
 
         course = CourseInfo("android_intents", "Android Programming with Intents")
@@ -125,15 +128,16 @@ object DataManager {
             notes.add(note)
         }
     }
+
     fun loadNotes(vararg noteIds: Int): List<NoteInfo> {
         simulateLoadDelay()
         val noteList: List<NoteInfo>
 
-        if(noteIds.isEmpty())
+        if (noteIds.isEmpty())
             noteList = notes
         else {
             noteList = ArrayList<NoteInfo>(noteIds.size)
-            for(noteId in noteIds)
+            for (noteId in noteIds)
                 noteList.add(notes[noteId])
         }
         return noteList
@@ -150,8 +154,9 @@ object DataManager {
     fun idOfNote(note: NoteInfo) = notes.indexOf(note)
     fun noteIdsAsIntArray(notes: List<NoteInfo>): IntArray {
         val noteIds = IntArray(notes.size)
-        for(index in 0..notes.lastIndex)
+        for (index in 0..notes.lastIndex)
             noteIds[index] = idOfNote(notes[index])
         return noteIds
     }
+
 }

@@ -9,13 +9,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NoteKeeper">
+        <receiver
+            android:name=".NotificationBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
         <activity
             android:name=".NoteQuickViewActivity"
+            android:excludeFromRecents="true"
             android:exported="false"
             android:launchMode="singleTask"
-            android:excludeFromRecents="true"
-            android:taskAffinity=""/>
-        <activity android:name=".NoteListActivity"
+            android:taskAffinity="" />
+        <activity
+            android:name=".NoteListActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
