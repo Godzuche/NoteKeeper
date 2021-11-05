@@ -14,8 +14,17 @@
         <!-- Customize your theme here. -->
         <item name="editTextStyle">@style/RedGreenEditText</item>
     </style>
+
     <style name="RedGreenEditText" parent="Widget.AppCompat.EditText">
         <item name="android:textColor">@color/green_dark</item>
         <item name="android:textColorHint">@color/accent_dark</item>
     </style>
+
+    <style name="Theme.NoteKeeper.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
+        <item name="appWidgetRadius">8dp</item>
+        <item name="appWidgetPadding">4dp</item>
+        <item name="appWidgetInnerRadius">4dp</item>
+    </style>
+
+    <style name="Theme.NoteKeeper.AppWidgetContainer" parent="Theme.NoteKeeper.AppWidgetContainerParent" />
 </resources>

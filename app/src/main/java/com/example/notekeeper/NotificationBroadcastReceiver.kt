@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.Person
 import androidx.core.app.RemoteInput
@@ -27,13 +26,9 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 .setIcon(IconCompat.createWithResource(context, R.drawable.ic_baseline_person_24))
                 .setName("Jonathan").build()
 
-            val repliedNotification = NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_baseline_library_books_24)
-                .setStyle(NotificationCompat.MessagingStyle(user)
-                    .addMessage(text, System.currentTimeMillis(), user))
-
 //            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
+            //added the new reply to the messaging style
             style.addMessage(text, System.currentTimeMillis(), user)
 
             with(NotificationManagerCompat.from(context)){

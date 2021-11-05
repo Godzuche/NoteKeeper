@@ -10,9 +10,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NoteKeeper">
         <receiver
+            android:name=".NoteKeeperAppWidget"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/note_keeper_app_widget_info" />
+        </receiver>
+        <receiver
             android:name=".NotificationBroadcastReceiver"
             android:enabled="true"
             android:exported="false" />
+
+        <service android:name=".AppWidgetRemoteViewService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
 
         <activity
             android:name=".NoteQuickViewActivity"

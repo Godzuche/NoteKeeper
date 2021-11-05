@@ -42,4 +42,7 @@
         <item>#81C784</item>
         <item>#FFF176</item>
     </string-array>
+    <string name="appwidget_text">NOTES</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
 </resources>

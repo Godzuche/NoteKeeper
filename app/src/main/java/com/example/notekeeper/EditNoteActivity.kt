@@ -310,6 +310,7 @@ class EditNoteActivity : AppCompatActivity() {
         note.text = binding.contentEditNote.noteText.text.toString()
         note.course = binding.contentEditNote.courseSpinner.selectedItem as CourseInfo
         note.color = this.noteColor
+        sendRefreshBroadcast(this)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
